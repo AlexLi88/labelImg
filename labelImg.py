@@ -103,6 +103,9 @@ class MainWindow(QMainWindow, WindowMixin):
         self.labelHist = []
         self.lastOpenDir = None
 
+        # Create a list to save location list 
+        self.locationHist = []
+
         # Whether we need to save or not.
         self.dirty = False
 
@@ -141,9 +144,17 @@ class MainWindow(QMainWindow, WindowMixin):
         self.editButton = QToolButton()
         self.editButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
 
+
+        # Add dropdown menu for selecting where was image shot
+        #############
+        self.locDropdown = QComboBox()
+        self.setUpDropdownMenu(fileName='predefined_loc.txt')
+        # print(self.locDropdown.activated[str])
+
         # Add some of widgets to listLayout
         listLayout.addWidget(self.editButton)
         listLayout.addWidget(self.diffcButton)
+        listLayout.addWidget(self.locDropdown)
         listLayout.addWidget(useDefaultLabelContainer)
 
         # Create and add a widget for showing current label items
@@ -723,8 +734,10 @@ class MainWindow(QMainWindow, WindowMixin):
         try:
             if self.usingPascalVocFormat is True:
                 print ('Img: ' + self.filePath + ' -> Its xml: ' + annotationFilePath)
+                locText = str(self.locDropdown.currentText())
+                print (locText)
                 self.labelFile.savePascalVocFormat(annotationFilePath, shapes, self.filePath, self.imageData,
-                                                   self.lineColor.getRgb(), self.fillColor.getRgb())
+                                                   locText, self.lineColor.getRgb(), self.fillColor.getRgb())
             else:
                 self.labelFile.save(annotationFilePath, shapes, self.filePath, self.imageData,
                                     self.lineColor.getRgb(), self.fillColor.getRgb())
@@ -1298,6 +1311,25 @@ class MainWindow(QMainWindow, WindowMixin):
                         self.labelHist = [line]
                     else:
                         self.labelHist.append(line)
+
+    def setUpDropdownMenu(self, fileName):
+        filePath = os.path.join('data', fileName)
+        if os.path.exists(filePath) is True:
+            with codecs.open(filePath, 'r', 'utf8') as f:
+                for line in f:
+                    line = line.strip()
+                    if self.locationHist is None:
+                        self.locationHist = [line]
+                    else:
+                        self.locationHist.append(line)
+
+        for l in self.locationHist:
+            self.locDropdown.addItem(l)
+
+
+
+
+
 
     def loadPascalXMLByFilename(self, xmlPath):
         if self.filePath is None:

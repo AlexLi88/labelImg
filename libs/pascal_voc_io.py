@@ -11,11 +11,12 @@ ENCODE_METHOD = 'utf-8'
 
 class PascalVocWriter:
 
-    def __init__(self, foldername, filename, imgSize,databaseSrc='Unknown', localImgPath=None):
+    def __init__(self, foldername, filename, imgSize, location, databaseSrc='Unknown', localImgPath=None):
         self.foldername = foldername
         self.filename = filename
         self.databaseSrc = databaseSrc
         self.imgSize = imgSize
+        self.location = location
         self.boxlist = []
         self.localImgPath = localImgPath
         self.verified = False
@@ -72,6 +73,9 @@ class PascalVocWriter:
 
         segmented = SubElement(top, 'segmented')
         segmented.text = '0'
+
+        location = SubElement(top, 'location')
+        location.text = self.location
         return top
 
     def addBndBox(self, xmin, ymin, xmax, ymax, name, difficult):
