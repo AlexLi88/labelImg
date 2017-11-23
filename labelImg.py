@@ -737,7 +737,7 @@ class MainWindow(QMainWindow, WindowMixin):
         try:
             if self.usingPascalVocFormat is True:
                 print ('Img: ' + self.filePath + ' -> Its xml: ' + annotationFilePath)
-                locText = str(self.locDropdown.currentText())
+                locText = str(self.locDropdown.currentText().toUtf8()).decode('utf-8')
                 print (locText)
                 self.labelFile.savePascalVocFormat(annotationFilePath, shapes, self.filePath, self.imageData,
                                                    locText, self.lineColor.getRgb(), self.fillColor.getRgb())
@@ -956,6 +956,7 @@ class MainWindow(QMainWindow, WindowMixin):
                     xmlPath = os.path.join(self.defaultSaveDir, basename)
                     self.loadPascalXMLByFilename(xmlPath)
                 else:
+                    filePath = str(filePath)
                     xmlPath = os.path.splitext(filePath)[0] + XML_EXT
                     if os.path.isfile(xmlPath):
                         self.loadPascalXMLByFilename(xmlPath)
