@@ -147,13 +147,16 @@ class MainWindow(QMainWindow, WindowMixin):
 
         # Add dropdown menu for selecting where was image shot
         #############
+        self.l1 = QLabel()
+        self.l1.setText(u'选择位置')
         self.locDropdown = QComboBox()
         self.setUpDropdownMenu(fileName='predefined_loc.txt')
         # print(self.locDropdown.activated[str])
 
         # Add some of widgets to listLayout
         listLayout.addWidget(self.editButton)
-        listLayout.addWidget(self.diffcButton)
+        listLayout.addWidget(self.l1)
+        # listLayout.addWidget(self.diffcButton)
         listLayout.addWidget(self.locDropdown)
         listLayout.addWidget(useDefaultLabelContainer)
 
