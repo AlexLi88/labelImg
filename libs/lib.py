@@ -75,9 +75,12 @@ def fmtShortcut(text):
 
 
 def generateColorByText(text):
-    s = text.encode('utf-8')
-    # s = str(text.toUtf8()).decode('utf-8')   
-    hashCode = int(hashlib.sha256(s).hexdigest(), 16)
+    if isinstance(text, QString):
+        s = str(text.toUtf8()).decode('utf-8')   
+        hashCode = int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16)
+    else:
+        s = text.encode('utf-8')
+        hashCode = int(hashlib.sha256(s).hexdigest(), 16)
     r = int((hashCode / 255) % 255)
     g = int((hashCode / 65025)  % 255)
     b = int((hashCode / 16581375)  % 255)
